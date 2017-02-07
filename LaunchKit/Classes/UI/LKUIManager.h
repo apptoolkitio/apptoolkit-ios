@@ -50,7 +50,7 @@ typedef void (^LKAppRatingPromptCompletionHandler)(BOOL didPresent, LKViewContro
  @method
 
  @abstract
- Loads remote UI (generally cached to disk) you have configured at launchkit.io to work with this app.
+ Loads remote UI (generally cached to disk) you have configured at apptoolkit.io to work with this app.
 
  @discussion
  Given an id, LaunchKit will look for a UI with that id within its remote UI cache, and perhaps retrieve it
@@ -58,7 +58,7 @@ typedef void (^LKAppRatingPromptCompletionHandler)(BOOL didPresent, LKViewContro
  nibs retrieved from LaunchKit. You can tell LaunchKit to present this view controller using
  -presentRemoteUIViewController:fromViewController:animated:dismissalHandler
 
- @param remoteUIId A string representing the id of the UI you want to load. This is configured at launchkit.io.
+ @param remoteUIId A string representing the id of the UI you want to load. This is configured at apptoolkit.io.
  @param completion When the remote UI is available, an instance of the view controller is returned. If an error occurred,
  the error is returned as well. You should ret
 

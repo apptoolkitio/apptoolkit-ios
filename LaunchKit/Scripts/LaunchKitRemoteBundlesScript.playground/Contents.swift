@@ -3,7 +3,7 @@ import Foundation
 
 // EXIT IF NOT RUNNING WITH PARAM
 if Process.arguments.count <= 1 {
-    print("No API token supplied. Supply API token as first parameter. Get an api token at https://launchkit.io/account/sdk-tokens")
+    print("No API token supplied. Supply API token as first parameter. Get an api token at https://apptoolkit.io/account/sdk-tokens")
     exit(EXIT_FAILURE)
 }
 
@@ -26,7 +26,7 @@ let apiBaseUrlString: String
 if useLocalServer {
     apiBaseUrlString = "http://localhost:9101"
 } else {
-    apiBaseUrlString = "https://api.launchkit.io"
+    apiBaseUrlString = "https://api.apptoolkit.io"
 }
 
 let env = NSProcessInfo.processInfo().environment

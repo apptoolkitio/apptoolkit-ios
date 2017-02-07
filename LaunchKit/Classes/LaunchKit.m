@@ -22,7 +22,7 @@ static NSTimeInterval const DEFAULT_TRACKING_INTERVAL = 30.0;
 static NSTimeInterval const MIN_TRACKING_INTERVAL = 5.0;
 
 static BOOL USE_LOCAL_LAUNCHKIT_SERVER = NO;
-static NSString* const BASE_API_URL_REMOTE = @"https://api.launchkit.io/";
+static NSString* const BASE_API_URL_REMOTE = @"https://api.apptoolkit.io/";
 static NSString* const BASE_API_URL_LOCAL = @"http://localhost:9101/";
 
 static NSTimeInterval const DEFAULT_MAX_ONBOARDING_WAIT_TIME_INTERVAL = 15.0;
@@ -138,7 +138,7 @@ static LaunchKit *_sharedInstance;
             apiToken = @"";
         }
         if (apiToken.length == 0) {
-            LKLogError(@"Invalid or empty api token. Please get one from https://launchkit.io/tokens for your team.");
+            LKLogError(@"Invalid or empty api token. Please get one from https://apptoolkit.io/tokens for your team.");
         }
         self.apiToken = apiToken;
 

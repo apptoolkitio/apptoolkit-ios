@@ -70,13 +70,13 @@ typedef void (^LKUIManifestRefreshHandler)();
 - (nullable id)init __attribute__((unavailable("Use +launchWithToken: to initialize LaunchKit, and +sharedInstance to retrieve the shared LaunchKit instance.")));
 
 /**
- * User-configurable parameters that you may have set in LaunchKit's Cloud Config tool. See https://launchkit.io/config
+ * User-configurable parameters that you may have set in LaunchKit's Cloud Config tool. See https://apptoolkit.io/config
  */
 @property (readonly, strong, nonatomic, nonnull) LKConfig *config;
 
 
 /**
- * According to LaunchKit, what information is availabe for the current app user. See https://launchkit.io/users
+ * According to LaunchKit, what information is availabe for the current app user. See https://apptoolkit.io/users
  */
 @property (readonly, nonatomic, nullable) LKAppUser *currentUser;
 

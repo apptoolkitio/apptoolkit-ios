@@ -66,7 +66,7 @@
         if ([[UIApplication sharedApplication] canOpenURL:url]) {
             [[UIApplication sharedApplication] openURL:url];
         } else {
-            url = [NSURL URLWithString:@"https://launchkit.io/"];
+            url = [NSURL URLWithString:@"https://apptoolkit.io/"];
             [[UIApplication sharedApplication] openURL:url];
         }
     }
