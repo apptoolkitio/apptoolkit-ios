@@ -1,31 +1,31 @@
 //
-//  LaunchKitTests.m
-//  LaunchKitTests
+//  AppToolkitTests.m
+//  AppToolkitTests
 //
 //  Created by Rizwan Sattar on 01/12/2015.
 //  Copyright (c) 2014 Rizwan Sattar. All rights reserved.
 //
 
-#import <LaunchKit/LaunchKit.h>
-#import <LaunchKit/LKAPIClient.h>
-#import <LaunchKit/LKAnalytics.h>
+#import <AppToolkit/AppToolkit.h>
+#import <AppToolkit/ATKAPIClient.h>
+#import <AppToolkit/ATKAnalytics.h>
 
-NSString *const LAUNCHKIT_TEST_API_TOKEN = @"-0zvS4K8dMZRFrfUJdexflRpoRCuU4wmppfNfcoHkugo";
+NSString *const APPTOOLKIT_TEST_API_TOKEN = @"zdpYby-IMTyL0hxn1MvnjCT_jNpgI-20CrU4Tg9ATFqt";
 
-@interface LaunchKit (TestingAdditions)
+@interface AppToolkit (TestingAdditions)
 
 @property (copy, nonatomic) NSString *apiToken;
 /** Long-lived, persistent dictionary that is sent up with API requests. */
 @property (copy, nonatomic) NSDictionary *sessionParameters;
-@property (strong, nonatomic) LKAPIClient *apiClient;
+@property (strong, nonatomic) ATKAPIClient *apiClient;
 @property (strong, nonatomic) NSTimer *trackingTimer;
 @property (assign, nonatomic) NSTimeInterval trackingInterval;
 // Analytics
-@property (strong, nonatomic) LKAnalytics *analytics;
+@property (strong, nonatomic) ATKAnalytics *analytics;
 // Config
-@property (readwrite, strong, nonatomic, nonnull) LKConfig *config;
+@property (readwrite, strong, nonatomic, nonnull) ATKConfig *config;
 // Bundles
-@property (strong, nonatomic) LKBundlesManager *bundlesManager;
+@property (strong, nonatomic) ATKBundlesManager *bundlesManager;
 
 - (nonnull instancetype)initWithToken:(NSString *)apiToken;
 - (void)archiveSession;
@@ -34,14 +34,14 @@ NSString *const LAUNCHKIT_TEST_API_TOKEN = @"-0zvS4K8dMZRFrfUJdexflRpoRCuU4wmppf
 
 @end
 
-@interface LKConfig (TestingAdditions)
+@interface ATKConfig (TestingAdditions)
 
 @property (readwrite, strong, nonatomic, nonnull) NSDictionary *parameters;
-- (NSDictionary *)dictionaryWithoutLaunchKitKeys:(nonnull NSDictionary *)dictionary;
+- (NSDictionary *)dictionaryWithoutAppToolkitKeys:(nonnull NSDictionary *)dictionary;
 
 @end
 
-@interface LKAPIClient (TestingAdditions)
+@interface ATKAPIClient (TestingAdditions)
 
 @property (strong, nonatomic) NSString *cachedBundleIdentifier; // E.g.: com.yourcompany.appname
 @property (strong, nonatomic) NSString *cachedBundleVersion;    // E.g.: 1.2
@@ -53,40 +53,40 @@ NSString *const LAUNCHKIT_TEST_API_TOKEN = @"-0zvS4K8dMZRFrfUJdexflRpoRCuU4wmppf
 
 @end
 
-@interface LKBundlesManager (TestingAdditions)
+@interface ATKBundlesManager (TestingAdditions)
 
-- (LKBundleInfo *)localBundleInfoWithName:(NSString *)name;
-- (LKBundleInfo *)remoteBundleInfoWithName:(NSString *)name;
+- (ATKBundleInfo *)localBundleInfoWithName:(NSString *)name;
+- (ATKBundleInfo *)remoteBundleInfoWithName:(NSString *)name;
 - (void)retrieveAndCacheAvailableRemoteBundlesWithAssociatedServerTimestamp:(NSDate *)serverTimestamp completion:(void (^)(NSError *error))completion;
 
 @end
 
-SpecBegin(LaunchKitTest)
+SpecBegin(AppToolkitTest)
 
-describe(@"LaunchKit", ^{
+describe(@"AppToolkit", ^{
 
-    __block LaunchKit *launchKit = nil;
+    __block AppToolkit *appToolkit = nil;
     beforeAll(^{
-        launchKit = [[LaunchKit alloc] initWithToken:LAUNCHKIT_TEST_API_TOKEN];
+        appToolkit = [[AppToolkit alloc] initWithToken:APPTOOLKIT_TEST_API_TOKEN];
     });
 
     afterAll(^{
-        launchKit = nil;
+        appToolkit = nil;
     });
 
     
     it(@"stores the API Token passed in", ^{
-        expect(launchKit.apiToken).to.equal(LAUNCHKIT_TEST_API_TOKEN);
+        expect(appToolkit.apiToken).to.equal(APPTOOLKIT_TEST_API_TOKEN);
     });
 
     it(@"can restore its session parameters", ^{
-        NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:launchKit.sessionParameters];
+        NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:appToolkit.sessionParameters];
         NSTimeInterval timeInterval = [[NSDate date] timeIntervalSince1970];
         params[@"test"] = @(timeInterval);
-        launchKit.sessionParameters = params;
-        [launchKit archiveSession];
-        [launchKit retrieveSessionFromArchiveIfAvailable];
-        expect(launchKit.sessionParameters).to.equal(params);
+        appToolkit.sessionParameters = params;
+        [appToolkit archiveSession];
+        [appToolkit retrieveSessionFromArchiveIfAvailable];
+        expect(appToolkit.sessionParameters).to.equal(params);
     });
 
     it(@"can handle multiple track calls, in sequence", ^{
@@ -94,14 +94,14 @@ describe(@"LaunchKit", ^{
         __block NSString *secondSessionId = nil;
 
         waitUntil(^(DoneCallback done) {
-            launchKit.sessionParameters = @{};
-            [launchKit trackProperties:nil completionHandler:^{
+            appToolkit.sessionParameters = @{};
+            [appToolkit trackProperties:nil completionHandler:^{
                 // Should give us a new session Id
-                firstSessionId = launchKit.sessionParameters[@"session_id"];
+                firstSessionId = appToolkit.sessionParameters[@"session_id"];
             }];
-            [launchKit trackProperties:nil completionHandler:^{
+            [appToolkit trackProperties:nil completionHandler:^{
                 // Should give us the same session id
-                secondSessionId = launchKit.sessionParameters[@"session_id"];
+                secondSessionId = appToolkit.sessionParameters[@"session_id"];
                 done();
             }];
         });
@@ -110,11 +110,11 @@ describe(@"LaunchKit", ^{
 
 });
 
-describe(@"LKConfig", ^{
+describe(@"ATKConfig", ^{
 
-    __block LKConfig *config = nil;
+    __block ATKConfig *config = nil;
     beforeAll(^{
-        config = [[LKConfig alloc] initWithParameters:@{}];
+        config = [[ATKConfig alloc] initWithParameters:@{}];
     });
 
     beforeEach(^{
@@ -177,61 +177,61 @@ describe(@"LKConfig", ^{
     });
 
     it(@"strips internal keys", ^{
-        NSDictionary *parameters = @{@"io.launchkit.currentVersionDuration" : @(0.018598),
-                                     @"io.launchkit.installDuration" : @(0.018624)};
-        NSDictionary *stripped = [config dictionaryWithoutLaunchKitKeys:parameters];
+        NSDictionary *parameters = @{@"io.apptoolkit.currentVersionDuration" : @(0.018598),
+                                     @"io.apptoolkit.installDuration" : @(0.018624)};
+        NSDictionary *stripped = [config dictionaryWithoutAppToolkitKeys:parameters];
         expect(stripped.count).to.equal(0);
     });
 });
 
 
-describe(@"LKBundlesManager", ^{
+describe(@"ATKBundlesManager", ^{
 
 
-    __block LaunchKit *launchKit = nil;
+    __block AppToolkit *appToolkit = nil;
     beforeAll(^{
-        [LKBundlesManager deleteBundlesCacheDirectory];
+        [ATKBundlesManager deleteBundlesCacheDirectory];
 
-        launchKit = [[LaunchKit alloc] initWithToken:LAUNCHKIT_TEST_API_TOKEN];
-        launchKit.apiClient.cachedBundleIdentifier = @"com.getcluster.LaunchKitSample.LKBundlesTest";
+        appToolkit = [[AppToolkit alloc] initWithToken:APPTOOLKIT_TEST_API_TOKEN];
+        appToolkit.apiClient.cachedBundleIdentifier = @"io.apptoolkit.AppToolkitSample.ATKBundlesTest";
     });
 
     afterAll(^{
-        launchKit = nil;
+        appToolkit = nil;
     });
 
     it(@"does not have local release notes bundle", ^{
-        LKBundleInfo *info = [launchKit.bundlesManager localBundleInfoWithName:@"WhatsNew"];
+        ATKBundleInfo *info = [appToolkit.bundlesManager localBundleInfoWithName:@"WhatsNew"];
         expect(info).to.beNil();
     });
 
     it(@"can find the release notes bundle for 1.0", ^{
-        launchKit.apiClient.cachedBundleVersion = @"1.0";
+        appToolkit.apiClient.cachedBundleVersion = @"1.0";
         waitUntil(^(DoneCallback done) {
-            [launchKit.bundlesManager retrieveAndCacheAvailableRemoteBundlesWithAssociatedServerTimestamp:nil completion:^(NSError *error) {
+            [appToolkit.bundlesManager retrieveAndCacheAvailableRemoteBundlesWithAssociatedServerTimestamp:nil completion:^(NSError *error) {
                 done();
             }];
         });
-        LKBundleInfo *info = [launchKit.bundlesManager localBundleInfoWithName:@"WhatsNew"];
-        expect(info).to.beInstanceOf([LKBundleInfo class]);
+        ATKBundleInfo *info = [appToolkit.bundlesManager localBundleInfoWithName:@"WhatsNew"];
+        expect(info).to.beInstanceOf([ATKBundleInfo class]);
     });
 
     it(@"up-to-date manifest can return a bundle immediately, if available", ^{
         // Ensure that we save our remote bundles with an actual timestamp that's testable
         NSDate *now = [NSDate date];
         waitUntil(^(DoneCallback done) {
-            [launchKit.bundlesManager retrieveAndCacheAvailableRemoteBundlesWithAssociatedServerTimestamp:now completion:^(NSError *error) {
+            [appToolkit.bundlesManager retrieveAndCacheAvailableRemoteBundlesWithAssociatedServerTimestamp:now completion:^(NSError *error) {
                 done();
             }];
         });
-        // Now create a new LK instance, with a new bundles manager instance
-        LaunchKit *newLKInstance = [[LaunchKit alloc] initWithToken:LAUNCHKIT_TEST_API_TOKEN];
-        newLKInstance.apiClient.cachedBundleIdentifier = @"com.getcluster.LaunchKitSample.LKBundlesTest";
-        newLKInstance.apiClient.cachedBundleVersion = @"1.0";
+        // Now create a new ATK instance, with a new bundles manager instance
+        AppToolkit *newATKInstance = [[AppToolkit alloc] initWithToken:APPTOOLKIT_TEST_API_TOKEN];
+        newATKInstance.apiClient.cachedBundleIdentifier = @"io.apptoolkit.AppToolkitSample.ATKBundlesTest";
+        newATKInstance.apiClient.cachedBundleVersion = @"1.0";
 
         // Simulate how the bundlesManager might be told it is up-to-date
         //NSLog(@"Marking bundles manager as 'up-to-date'");
-        [newLKInstance.bundlesManager updateServerBundlesUpdatedTimeWithTime:now];
+        [newATKInstance.bundlesManager updateServerBundlesUpdatedTimeWithTime:now];
 
         waitUntil(^(DoneCallback done) {
             //NSLog(@"Waiting 2.0 secs...");
@@ -242,7 +242,7 @@ describe(@"LKBundlesManager", ^{
         __block BOOL loadedBundle = NO;
         waitUntilTimeout(2.0, ^(DoneCallback done) {
             //NSLog(@"loading 'WhatsNew' bundle in uptodate bundles manager...");
-            [newLKInstance.bundlesManager loadBundleWithId:@"WhatsNew" completion:^(NSBundle *bundle, NSError *error) {
+            [newATKInstance.bundlesManager loadBundleWithId:@"WhatsNew" completion:^(NSBundle *bundle, NSError *error) {
                 //NSLog(@"'WhatsNew' bundle did load in the bundles manager!");
                 loadedBundle = (bundle != nil);
                 done();
@@ -252,13 +252,13 @@ describe(@"LKBundlesManager", ^{
     });
 
     it(@"can delete expired bundles", ^{
-        launchKit.apiClient.cachedBundleVersion = @"2.0";
+        appToolkit.apiClient.cachedBundleVersion = @"2.0";
         waitUntil(^(DoneCallback done) {
-            [launchKit.bundlesManager retrieveAndCacheAvailableRemoteBundlesWithAssociatedServerTimestamp:nil completion:^(NSError *error) {
+            [appToolkit.bundlesManager retrieveAndCacheAvailableRemoteBundlesWithAssociatedServerTimestamp:nil completion:^(NSError *error) {
                 done();
             }];
         });
-        LKBundleInfo *info = [launchKit.bundlesManager localBundleInfoWithName:@"WhatsNew"];
+        ATKBundleInfo *info = [appToolkit.bundlesManager localBundleInfoWithName:@"WhatsNew"];
         expect(info).to.beNil();
     });
 

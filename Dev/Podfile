@@ -1,28 +1,30 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
-xcodeproj 'LaunchKitSample.xcodeproj'
-workspace 'LaunchKitDev.xcworkspace'
+project 'AppToolkitSample.xcodeproj'
+workspace 'AppToolkitDev.xcworkspace'
 
-target 'LaunchKitSample', :exclusive => true do
-    pod "LaunchKit/Internal", :path => "../"
+target 'AppToolkitSample' do
+    inherit! :search_paths
+    pod "AppToolkit/Internal", :path => "../"
 end
 
-target 'Tests', :exclusive => true do
-    pod "LaunchKit/Internal", :path => "../"
+target 'Tests' do
+    inherit! :search_paths
+    pod "AppToolkit/Internal", :path => "../"
 
   pod 'Specta', '~> 1.0.3'
   pod 'Expecta', '~> 1.0.2'
 end
 
 # See: http://stackoverflow.com/questions/21046282/debug-preprocessor-macro-not-defined-for-cocoapods-targets
-# For 'Debug' configs, add LAUNCHKIT_(DEBUG|WARN|ERROR)=1 to the params
+# For 'Debug' configs, add APPTOOLKIT_(DEBUG|WARN|ERROR)=1 to the params
 post_install do |installer_or_representation|
     installer = installer_or_representation.respond_to?(:installer) ? installer_or_representation.installer : installer_or_representation
     installer.pods_project.build_configurations.each do |config|
         if config.name.include?('Debug')
             config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)']
 
-            ['LAUNCHKIT_DEBUG=1', 'LAUNCHKIT_ERROR=1', 'LAUNCHKIT_WARN=1'].each do |param|
+            ['APPTOOLKIT_DEBUG=1', 'APPTOOLKIT_ERROR=1', 'APPTOOLKIT_WARN=1'].each do |param|
                 if !config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'].include? param
                     config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << param
                 end
