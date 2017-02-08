@@ -1,10 +1,10 @@
-<p align="center"><img src="https://d2kfjaekmjmy1l.cloudfront.net/images/whats-new/icon-v0bb9d08f9206.png" width="100" alt="LaunchKit Cloud Config Logo"/></p>
-# LaunchKit Release Notes
+<p align="center"><img src="https://s3.amazonaws.com/images.1776productions.com/apptoolkit/images/onboardingicon.png" width="100" alt="AppToolkit Cloud Config Logo"/></p>
 
+# AppToolkit Release Notes
 
-### Step 1: Install and Configure LaunchKit iOS SDK
+### Step 1: Install and Configure AppToolkit iOS SDK
 
-If it is not already, [install the LaunchKit iOS SDK](https://github.com/LaunchKit/launchkit-ios/blob/master/README.md) in your app.
+If it is not already, [install the AppToolkit iOS SDK](https://github.com/apptoolkitio/apptoolkit-ios/blob/master/README.md) in your app.
 
 
 
@@ -15,12 +15,12 @@ A good time to show the card is after the user logs in, on the main screen of th
 Swift:
 
 ```
-import LaunchKit
+import AppToolkit
 
 ...
 override func viewDidAppear(animated: Bool) {
     super.viewDidAppear(animated)
-    LaunchKit.sharedInstance().presentAppReleaseNotesIfNeededFromViewController(self) { (didPresent) -> Void in
+    AppToolkit.sharedInstance().presentAppReleaseNotesIfNeededFromViewController(self) { (didPresent) -> Void in
         if didPresent {
             print("Woohoo, we showed the release notes card!")
         }
@@ -31,13 +31,13 @@ override func viewDidAppear(animated: Bool) {
 Objective C:
 
 ```
-#import <LaunchKit/LaunchKit.h>
+#import <AppToolkit/AppToolkit.h>
 
 ...
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [[LaunchKit sharedInstance] presentAppReleaseNotesIfNeededFromViewController:self completion:^(BOOL didPresent) {
+    [[AppToolkit sharedInstance] presentAppReleaseNotesIfNeededFromViewController:self completion:^(BOOL didPresent) {
         if (didPresent) {
             NSLog(@"Woohoo, we showed the release notes card!");
         }
@@ -45,31 +45,31 @@ Objective C:
 }
 ```
 
-That's pretty much it! LaunchKit will show you release notes in your app if:
+That's pretty much it! AppToolkit will show you release notes in your app if:
 
 * You _have_ release notes available for this particular version of your app, and
 * You _haven't_ shown those release notes before, on that device.
 
 #### Debugging
-If you'd like to _always_ present the release notes card (ignoring whether LaunchKit has shown them before, while debugging), you can set a debug flag:
+If you'd like to _always_ present the release notes card (ignoring whether AppToolkit has shown them before, while debugging), you can set a debug flag:
 
 Swift:
 
 ```
-LaunchKit.sharedInstance().debugAlwaysPresentAppReleaseNotes = true
+AppToolkit.sharedInstance().debugAlwaysPresentAppReleaseNotes = true
 ```
 
 Objective C:
 
 ```
-[LaunchKit sharedInstance].debugAlwaysPresentAppReleaseNotes = YES;
+[AppToolkit sharedInstance].debugAlwaysPresentAppReleaseNotes = YES;
 ```
 
 ---
 #### Author
 
-Cluster Labs, Inc., info@launchkit.io
+AppToolkit, Inc., info@apptoolkit.io
 
 #### License
 
-LaunchKit is available under the Apache 2.0 license. See the LICENSE file for more info.
+AppToolkit is available under the Apache 2.0 license. See the LICENSE file for more info.
